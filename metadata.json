@@ -1,0 +1,9 @@
+{
+  "name": "국민 건강 비서 (National Health Assistant)",
+  "description": "고혈압과 당뇨 관리를 위한 통합 건강 관리 서비스. AI 식단 분석, 수치 인식, 복약 관리 기능을 제공합니다.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "notifications"
+  ]
+}

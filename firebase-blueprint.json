@@ -1,0 +1,116 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Stores basic user information and health targets.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "displayName": { "type": "string" },
+        "email": { "type": "string" },
+        "bpTargetSystolic": { "type": "number", "description": "Target systolic blood pressure (e.g., 120)" },
+        "bpTargetDiastolic": { "type": "number", "description": "Target diastolic blood pressure (e.g., 80)" },
+        "sugarTargetFasting": { "type": "number", "description": "Target fasting blood sugar (e.g., 100)" },
+        "sugarTargetPostMeal": { "type": "number", "description": "Target post-meal blood sugar (e.g., 140)" },
+        "emergencyContact": { "type": "string", "description": "Phone number or email of family member" }
+      },
+      "required": ["uid", "displayName"]
+    },
+    "HealthReading": {
+      "title": "Health Reading",
+      "description": "Records of blood pressure or blood sugar measurements.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "type": { "type": "string", "enum": ["blood_pressure", "blood_sugar"] },
+        "systolic": { "type": "number" },
+        "diastolic": { "type": "number" },
+        "sugarLevel": { "type": "number" },
+        "isFasting": { "type": "boolean" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "note": { "type": "string" },
+        "status": { "type": "string", "enum": ["normal", "warning", "danger"] }
+      },
+      "required": ["uid", "type", "timestamp"]
+    },
+    "FoodLog": {
+      "title": "Food Log",
+      "description": "Records of meals with AI analysis.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "analysis": { "type": "string", "description": "AI feedback on the meal" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "rating": { "type": "string", "enum": ["good", "moderate", "bad"] }
+      },
+      "required": ["uid", "timestamp"]
+    },
+    "Medication": {
+      "title": "Medication",
+      "description": "Medication schedule and tracking.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "name": { "type": "string" },
+        "dosage": { "type": "string" },
+        "timeOfDay": { "type": "string" },
+        "takenToday": { "type": "boolean" },
+        "lastTaken": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "name"]
+    },
+    "Todo": {
+      "title": "Todo",
+      "description": "A simple to-do item for health management.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "task": { "type": "string" },
+        "completed": { "type": "boolean" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "task", "completed", "timestamp"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "Health alerts and reminders.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "type": { "type": "string", "enum": ["alert", "reminder", "info"] },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "read": { "type": "boolean" }
+      },
+      "required": ["uid", "title", "message", "type", "timestamp", "read"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile data"
+    },
+    "/readings/{readingId}": {
+      "schema": "HealthReading",
+      "description": "Health measurement logs"
+    },
+    "/foodLogs/{logId}": {
+      "schema": "FoodLog",
+      "description": "Meal analysis logs"
+    },
+    "/medications/{medId}": {
+      "schema": "Medication",
+      "description": "Medication tracking"
+    },
+    "/todos/{todoId}": {
+      "schema": "Todo",
+      "description": "User to-do items"
+    },
+    "/notifications/{notifId}": {
+      "schema": "Notification",
+      "description": "Health alerts and reminders"
+    }
+  }
+}
