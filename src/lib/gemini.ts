@@ -1,6 +1,17 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+// Helper to get the API key safely in the browser
+const getApiKey = () => {
+  const key = process.env.GEMINI_API_KEY;
+  if (!key || key === "MY_GEMINI_API_KEY") {
+    // In some environments, it might be available via import.meta.env
+    // or injected differently. We'll try to provide a clear error if it's truly missing.
+    return (import.meta as any).env?.VITE_GEMINI_API_KEY || "";
+  }
+  return key;
+};
+
+const ai = new GoogleGenAI({ apiKey: getApiKey() });
 
 export const analyzeFood = async (imageBase64: string) => {
   const model = "gemini-3-flash-preview";
