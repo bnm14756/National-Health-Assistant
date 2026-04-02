@@ -35,12 +35,15 @@
     },
     "FoodLog": {
       "title": "Food Log",
-      "description": "Records of meals with AI analysis.",
+      "description": "Records of meals with detailed AI analysis and calorie tracking.",
       "type": "object",
       "properties": {
         "uid": { "type": "string" },
         "imageUrl": { "type": "string" },
         "analysis": { "type": "string", "description": "AI feedback on the meal" },
+        "calories": { "type": "number", "description": "Estimated calories in the meal" },
+        "nutrients": { "type": "object", "description": "Breakdown of macronutrients (carbs, protein, fat)" },
+        "advice": { "type": "string", "description": "Specific health advice based on the meal" },
         "timestamp": { "type": "string", "format": "date-time" },
         "rating": { "type": "string", "enum": ["good", "moderate", "bad"] }
       },

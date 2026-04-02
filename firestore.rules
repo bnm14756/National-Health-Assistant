@@ -34,6 +34,9 @@ service cloud.firestore {
     //   - uid: string (required)
     //   - imageUrl: string (optional)
     //   - analysis: string (optional)
+    //   - calories: number (optional)
+    //   - nutrients: map (optional)
+    //   - advice: string (optional)
     //   - timestamp: string (required, ISO 8601)
     //   - rating: string (optional, 'good' | 'moderate' | 'bad')
     //
@@ -104,7 +107,10 @@ service cloud.firestore {
     function isValidFoodLog(data) {
       return data.keys().hasAll(['uid', 'timestamp']) &&
              data.uid == request.auth.uid &&
-             isValidDateString(data.timestamp);
+             isValidDateString(data.timestamp) &&
+             (!('calories' in data) || data.calories is number) &&
+             (!('nutrients' in data) || data.nutrients is map) &&
+             (!('advice' in data) || (data.advice is string && data.advice.size() < 2000));
     }
 
     function isValidMedication(data) {
