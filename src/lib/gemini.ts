@@ -2,16 +2,26 @@ import { GoogleGenAI, Type } from "@google/genai";
 
 // Helper to get the API key safely in the browser
 const getApiKey = () => {
-  const key = process.env.GEMINI_API_KEY;
-  if (!key || key === "MY_GEMINI_API_KEY") {
-    // In some environments, it might be available via import.meta.env
-    // or injected differently. We'll try to provide a clear error if it's truly missing.
-    return (import.meta as any).env?.VITE_GEMINI_API_KEY || "";
+  // Try process.env first (defined in vite.config.ts)
+  const processKey = process.env.GEMINI_API_KEY;
+  if (processKey && processKey !== "MY_GEMINI_API_KEY" && processKey !== "") {
+    return processKey;
   }
-  return key;
+
+  // Try import.meta.env as a fallback
+  const metaKey = (import.meta as any).env?.VITE_GEMINI_API_KEY;
+  if (metaKey && metaKey !== "MY_GEMINI_API_KEY" && metaKey !== "") {
+    return metaKey;
+  }
+
+  // If still missing, return an empty string (SDK will throw a clear error)
+  // or we can throw a custom one here.
+  console.error("GEMINI_API_KEY is missing. Please ensure it is set in the AI Studio Secrets panel.");
+  return "";
 };
 
-const ai = new GoogleGenAI({ apiKey: getApiKey() });
+const apiKey = getApiKey();
+const ai = new GoogleGenAI({ apiKey: apiKey || "dummy_key_to_prevent_immediate_crash" });
 
 export const analyzeFood = async (imageBase64: string) => {
   const model = "gemini-3-flash-preview";
